@@ -214,7 +214,10 @@ void xf_keyboard_send_key(xfContext* xfc, BOOL down, const XKeyEvent* event)
 	WINPR_ASSERT(input);
 
 	rdp_scancode = freerdp_keyboard_get_rdp_scancode_from_x11_keycode(event->keycode);
-	if (rdp_scancode == RDP_SCANCODE_PAUSE && !xf_keyboard_key_pressed(xfc, XK_Control_L) &&
+	// do not send Win_L -- I use that for i3
+	if (rdp_scancode == RDP_SCANCODE_LWIN || rdp_scancode == RDP_SCANCODE_LWIN) {
+		return;
+	} else if (rdp_scancode == RDP_SCANCODE_PAUSE && !xf_keyboard_key_pressed(xfc, XK_Control_L) &&
 	    !xf_keyboard_key_pressed(xfc, XK_Control_R))
 	{
 		/* Pause without Ctrl has to be sent as a series of keycodes
